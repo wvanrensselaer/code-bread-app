@@ -9,7 +9,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "jest": {
     "preset": "jest-expo"
@@ -43,6 +45,7 @@
     "babel-preset-expo": "^9",
     "jest": "^26",
     "jest-expo": "^45",
+    "prettier": "^2",
     "react-test-renderer": "^17",
     "typescript": "^4"
   }
