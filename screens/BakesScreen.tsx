@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import BakeList from '../components/BakeList';
+import BakeList from '../components/composite/BakeList';
 import { View } from '../components/Themed';
 import { RootTabScreenProps } from '../types';
 

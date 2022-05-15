@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import Bake from '../components/Bake';
+import Bake from '../components/composite/Bake';
 import { View } from '../components/Themed';
 import { RootStackScreenProps } from '../types';
 

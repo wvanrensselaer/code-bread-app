@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { FlatList, Pressable, StyleSheet } from 'react-native';
-import { Text } from '../Themed';
+import { Text } from '../../Themed';
 
 const BAKES = [
   { name: 'Country Sourdough' },
