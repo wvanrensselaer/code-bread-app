@@ -9,6 +9,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
+    "lint": "eslint .",
     "test": "jest --watchAll",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
@@ -41,9 +42,15 @@
   "devDependencies": {
     "@babel/core": "^7",
     "@babel/preset-env": "^7",
+    "@types/jest": "^27",
     "@types/react": "^17",
     "@types/react-native": "^0",
+    "@typescript-eslint/eslint-plugin": "^5",
+    "@typescript-eslint/parser": "^5",
     "babel-preset-expo": "^9",
+    "eslint": "^8",
+    "eslint-plugin-react": "^7",
+    "eslint-plugin-react-native": "^4",
     "jest": "^26",
     "jest-expo": "^45",
     "prettier": "^2",
