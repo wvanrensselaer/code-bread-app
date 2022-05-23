@@ -1,24 +1,46 @@
-import { Fragment } from 'react';
+import { Picker } from '@react-native-picker/picker';
+import { Fragment, useState } from 'react';
 import { FlatList, StyleSheet, TextInput } from 'react-native';
 import Timeline from 'react-native-timeline-flatlist';
 import { Text, View } from '../../Themed';
 
-const INGREDIENT_GROUPS = [
+interface Ingredient {
+  id: string;
+  quantity: string;
+  unit: string;
+  name: string;
+}
+
+interface IngredientGroup {
+  name: string;
+  ingredients: Ingredient[];
+}
+
+interface Step {
+  time: string;
+  title: string;
+  description?: string;
+}
+
+const INGREDIENT_GROUPS: IngredientGroup[] = [
   {
     name: 'Levain',
     ingredients: [
       {
-        quantity: 20,
+        id: 'Ingredient.1',
+        quantity: '20',
         unit: 'gram',
         name: 'Starter',
       },
       {
-        quantity: 40,
+        id: 'Ingredient.2',
+        quantity: '40',
         unit: 'gram',
         name: 'Flour',
       },
       {
-        quantity: 40,
+        id: 'Ingredient.3',
+        quantity: '40',
         unit: 'gram',
         name: 'Water',
       },
@@ -28,22 +50,26 @@ const INGREDIENT_GROUPS = [
     name: 'Main Dough',
     ingredients: [
       {
-        quantity: 100,
+        id: 'Ingredient.4',
+        quantity: '100',
         unit: 'gram',
         name: 'Levain',
       },
       {
-        quantity: 450,
+        id: 'Ingredient.5',
+        quantity: '450',
         unit: 'gram',
         name: 'Flour',
       },
       {
-        quantity: 350,
+        id: 'Ingredient.6',
+        quantity: '350',
         unit: 'gram',
         name: 'Water',
       },
       {
-        quantity: 10,
+        id: 'Ingredient.7',
+        quantity: '10',
         unit: 'gram',
         name: 'Salt',
       },
@@ -51,7 +77,7 @@ const INGREDIENT_GROUPS = [
   },
 ];
 
-const STEPS = [
+const STEPS: Step[] = [
   {
     time: '7:00 AM',
     title: 'Create Levain',
@@ -108,27 +134,127 @@ const STEPS = [
 ];
 
 export default function Bake() {
+  const [ingredientGroups, setIngredientGroups] = useState(INGREDIENT_GROUPS);
+
   return (
     <View>
       <View>
         <Text style={styles.h2}>Ingredients</Text>
-        {INGREDIENT_GROUPS.map((group) => (
+        {ingredientGroups.map((group, groupIndex) => (
           <Fragment key={group.name}>
             <Text style={styles.h3}>{group.name}</Text>
             <FlatList
               style={styles.list}
               data={group.ingredients}
-              renderItem={({ item: ingredient }) => {
-                const formatter = new Intl.NumberFormat('en-US', {
-                  style: 'unit',
-                  unit: ingredient.unit,
-                  notation: 'compact',
-                });
+              keyExtractor={(ingredient) => ingredient.id}
+              renderItem={({ item: ingredient, index: ingredientIndex }) => {
+                const handleQuantityChange = (quantity: string) => {
+                  setIngredientGroups([
+                    ...ingredientGroups.slice(0, groupIndex),
+                    {
+                      ...ingredientGroups[groupIndex],
+                      ingredients: [
+                        ...ingredientGroups[groupIndex].ingredients.slice(
+                          0,
+                          ingredientIndex
+                        ),
+                        {
+                          ...ingredientGroups[groupIndex].ingredients[
+                            ingredientIndex
+                          ],
+                          quantity,
+                        },
+                        ...ingredientGroups[groupIndex].ingredients.slice(
+                          ingredientIndex + 1
+                        ),
+                      ],
+                    },
+                    ...ingredientGroups.slice(groupIndex + 1),
+                  ]);
+                };
+
+                const handleUnitChange = (unit: string) => {
+                  setIngredientGroups([
+                    ...ingredientGroups.slice(0, groupIndex),
+                    {
+                      ...ingredientGroups[groupIndex],
+                      ingredients: [
+                        ...ingredientGroups[groupIndex].ingredients.slice(
+                          0,
+                          ingredientIndex
+                        ),
+                        {
+                          ...ingredientGroups[groupIndex].ingredients[
+                            ingredientIndex
+                          ],
+                          unit,
+                        },
+                        ...ingredientGroups[groupIndex].ingredients.slice(
+                          ingredientIndex + 1
+                        ),
+                      ],
+                    },
+                    ...ingredientGroups.slice(groupIndex + 1),
+                  ]);
+                };
+
+                const handleNameChange = (name: string) => {
+                  setIngredientGroups([
+                    ...ingredientGroups.slice(0, groupIndex),
+                    {
+                      ...ingredientGroups[groupIndex],
+                      ingredients: [
+                        ...ingredientGroups[groupIndex].ingredients.slice(
+                          0,
+                          ingredientIndex
+                        ),
+                        {
+                          ...ingredientGroups[groupIndex].ingredients[
+                            ingredientIndex
+                          ],
+                          name,
+                        },
+                        ...ingredientGroups[groupIndex].ingredients.slice(
+                          ingredientIndex + 1
+                        ),
+                      ],
+                    },
+                    ...ingredientGroups.slice(groupIndex + 1),
+                  ]);
+                };
 
                 return (
-                  <Text style={styles.listItem}>
-                    {formatter.format(ingredient.quantity)} {ingredient.name}
-                  </Text>
+                  <View style={styles.formGroup}>
+                    <View style={styles.formItemSmall}>
+                      <TextInput
+                        value={ingredient.quantity}
+                        onChangeText={handleQuantityChange}
+                        style={styles.formItemSmall}
+                      />
+                    </View>
+                    <View style={styles.formItemSmall}>
+                      <Picker
+                        selectedValue={ingredient.unit}
+                        onValueChange={handleUnitChange}
+                      >
+                        <Picker.Item label="g." value="gram" />
+                        <Picker.Item label="kg." value="kilogram" />
+                        <Picker.Item label="ml." value="milliliter" />
+                        <Picker.Item label="l." value="liter" />
+                        <Picker.Item label="tsp." value="teaspoon" />
+                        <Picker.Item label="tbsp." value="tablespoon" />
+                        <Picker.Item label="c." value="cup" />
+                        <Picker.Item label="oz." value="ounce" />
+                        <Picker.Item label="lb." value="pound" />
+                      </Picker>
+                    </View>
+                    <View style={styles.formItemLarge}>
+                      <TextInput
+                        value={ingredient.name}
+                        onChangeText={handleNameChange}
+                      />
+                    </View>
+                  </View>
                 );
               }}
             />
@@ -164,11 +290,6 @@ const styles = StyleSheet.create({
   list: {
     marginVertical: 8,
   },
-  listItem: {
-    paddingHorizontal: 16,
-    paddingVertical: 4,
-    textAlign: 'left',
-  },
   timeline: {
     marginVertical: 16,
   },
@@ -179,5 +300,19 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     paddingRight: 16,
     paddingTop: 0,
+  },
+  formGroup: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginBottom: 8,
+    paddingHorizontal: 8,
+  },
+  formItemSmall: {
+    flex: 1,
+    paddingHorizontal: 8,
+  },
+  formItemLarge: {
+    flex: 3,
+    paddingHorizontal: 8,
   },
 });

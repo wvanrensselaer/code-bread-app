@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@expo/vector-icons": "^13",
+    "@react-native-picker/picker": "^2",
     "@react-navigation/bottom-tabs": "^6",
     "@react-navigation/native": "^6",
     "@react-navigation/native-stack": "^6",

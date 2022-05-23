@@ -15,6 +15,7 @@ export default function BakeList() {
     <FlatList
       style={styles.list}
       data={BAKES}
+      keyExtractor={(bake) => bake.name}
       renderItem={({ item: bake }) => (
         <Pressable
           style={styles.listItem}
